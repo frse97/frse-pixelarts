@@ -1,0 +1,93 @@
+//Width and height of pixels
+$size: 0.4rem;
+$rows: 13;
+$cols: 16;
+
+//Colors
+$t: transparent;
+$black: #000;
+$brown: #731d1d;
+$skin: #ffd9df;
+$red: #e50000;
+$yellow: #FFD700;
+$blue: #0000e5;
+
+//Rows
+$one: ($t, $t, $t, $red, $red, $red, $red, $red, $red, $t, $t, $t, $t);
+$two: ($t, $red, $red, $red, $red, $red, $red, $red, $red, $red, $red);
+$tree: ($t, $brown, $brown, $brown, $skin, $skin, $skin, $black, $skin, $t, $t);
+$four: ($t, $brown, $skin, $brown, $skin, $skin, $skin, $skin, $black, $skin, $skin, $skin, $t);
+$five: ($t, $brown, $skin, $brown, $brown, $skin, $skin, $skin, $skin, $black, $skin, $skin, $skin);
+$six: ($t, $brown, $brown, $skin, $skin, $skin, $skin, $skin, $black, $black, $black, $black, $t);
+$seven: ($t, $t, $t, $skin, $skin, $skin, $skin, $skin, $skin, $skin, $skin, $t, $t);
+$eight: ($t, $t, $red, $red, $blue, $red, $red, $red, $red, $t, $t, $t, $t);
+$nine: ($t, $red, $red, $red, $blue, $red, $red, $blue, $red, $red, $red, $t, $t);
+$ten: ($red, $red, $red, $red, $blue, $blue, $blue, $blue, $blue, $red, $red, $red, $red, $t);
+$eleven: ($skin, $skin, $red, $blue, $yellow, $blue, $blue, $yellow, $blue, $red, $skin, $skin, $t);
+$twelve: ($skin, $skin, $skin, $blue, $blue, $blue, $blue, $blue, $blue, $skin, $skin, $skin, $t);
+$thirteen: ($skin, $skin, $blue, $blue, $blue, $blue, $blue, $blue, $blue, $blue, $skin, $skin, $t);
+$fourteen: ($t, $t, $blue, $blue, $blue, $t, $t, $blue, $blue, $blue, $t, $t, $t);
+$fiftheen: ($t, $brown, $brown, $brown, $t, $t, $t, $t, $brown, $brown, $brown, $t, $t);
+$sixteen: ($brown, $brown, $brown, $brown, $t, $t, $t, $t, $brown, $brown, $brown, $brown, $t);
+
+$supermario : (
+  ($t, $t, $t, $red, $red, $red, $red, $red, $red, $t, $t, $t, $t),
+  ($t, $t, $red, $red, $red, $red, $red, $red, $red, $red, $red, $red),
+  ($t, $t, $brown, $brown, $brown, $skin, $skin, $skin, $black, $skin, $t, $t, $t),
+  ($t, $brown, $skin, $brown, $skin, $skin, $skin, $skin, $black, $skin, $skin, $skin, $t),
+  ($t, $brown, $skin, $brown, $brown, $skin, $skin, $skin, $skin, $black, $skin, $skin, $skin),
+  ($t, $brown, $brown, $skin, $skin, $skin, $skin, $skin, $black, $black, $black, $black, $t),
+  ($t, $t, $t, $skin, $skin, $skin, $skin, $skin, $skin, $skin, $skin, $t, $t), 
+  ($t, $t, $red, $red, $blue, $red, $red, $red, $red, $t, $t, $t, $t),
+  ($t, $red, $red, $red, $blue, $red, $red, $blue, $red, $red, $red, $t, $t),
+  ($red, $red, $red, $red, $blue, $blue, $blue, $blue, $blue, $red, $red, $red, $red, $t),
+  ($skin, $skin, $red, $blue, $yellow, $blue, $blue, $yellow, $blue, $red, $skin, $skin, $t),
+  ($skin, $skin, $skin, $blue, $blue, $blue, $blue, $blue, $blue, $skin, $skin, $skin, $t),
+  ($skin, $skin, $blue, $blue, $blue, $blue, $blue, $blue, $blue, $blue, $skin, $skin, $t),
+  ($t, $t, $blue, $blue, $blue, $t, $t, $blue, $blue, $blue, $t, $t, $t),
+  ($t, $brown, $brown, $brown, $t, $t, $t, $t, $brown, $brown, $brown, $t, $t),
+  ($brown, $brown, $brown, $brown, $t, $t, $t, $t, $brown, $brown, $brown, $brown, $t)
+);
+
+@function pixelize($colors, $size) {
+  $result: '';
+  $numRows: length($colors);
+
+  @for $rowIndex from 1 through $numRows {
+    $y: ($rowIndex - 1);
+    $row: nth($colors, $rowIndex);
+    $numCols: length($row);
+
+    @for $cellIndex from 1 through $numCols {
+      $x: ($cellIndex - 1);
+      $color: nth($row, $cellIndex);
+
+      $sep: ', ';
+      @if $x == 0 and $y == 0 {
+        $sep: '';
+      }
+
+      $result: $result + '#{$sep}#{$x * $size} #{$y * $size} #{$color}'
+    }
+  }
+
+  $result: unquote($result);
+  @return $result;
+}
+
+.spmario {
+  position: relative;
+  width: calc(#{$rows} * #{$size});
+  height: calc(#{$cols} * #{$size});
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $size;
+    height: $size;
+    box-shadow: pixelize($supermario, $size);
+    
+  }
+}
